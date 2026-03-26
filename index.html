@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParentaLink - La co-parentalité, simplifiée</title>
+  <meta name="description" content="ParentaLink synchronise deux foyers : planning de garde, dépenses partagées, documents, règles éducatives et calendrier familial. Tout au même endroit.">
+  <meta property="og:title" content="ParentaLink - La co-parentalité, simplifiée">
+  <meta property="og:description" content="L'application qui relie deux foyers autour de l'essentiel : vos enfants. Planning de garde, dépenses, documents et règles éducatives en un seul endroit.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://parentalink.com">
+  <meta name="theme-color" content="#4A90E2">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Reset & Tokens ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --coral:      #4A90E2;
+      --coral-dark: #1976D2;
+      --coral-light:#64B5F6;
+      --amber:      #7ED321;
+      --cream:      #F5F7FA;
+      --sand:       #E3F2FD;
+      --stone:      #BBDEFB;
+      --ink:        #212121;
+      --ink-soft:   #37474F;
+      --ink-muted:  #607D8B;
+      --white:      #FFFFFF;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Plus Jakarta Sans', -apple-system, sans-serif;
+
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+      --radius-xl: 40px;
+
+      --shadow-sm: 0 2px 8px rgba(28,16,8,.07);
+      --shadow-md: 0 8px 32px rgba(28,16,8,.10);
+      --shadow-lg: 0 20px 60px rgba(28,16,8,.13);
+
+      --max-w: 1160px;
+      --section-py: 96px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ─── Typography helpers ─────────────────────────────────────── */
+    .display {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+    }
+
+    .label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+
+    /* ─── Layout helpers ─────────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section { padding: var(--section-py) 0; }
+
+    /* ─── Animations ─────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(.94); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes floatA {
+      0%,100% { transform: translateY(0px) rotate(0deg); }
+      50%      { transform: translateY(-14px) rotate(2deg); }
+    }
+    @keyframes floatB {
+      0%,100% { transform: translateY(0px) rotate(0deg); }
+      50%      { transform: translateY(-9px) rotate(-1.5deg); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(.94);
+      transition: opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .delay-1 { transition-delay: .08s; }
+    .delay-2 { transition-delay: .16s; }
+    .delay-3 { transition-delay: .24s; }
+    .delay-4 { transition-delay: .32s; }
+    .delay-5 { transition-delay: .40s; }
+    .delay-6 { transition-delay: .48s; }
+    .delay-7 { transition-delay: .56s; }
+    .delay-8 { transition-delay: .64s; }
+
+    /* ─── Navbar ─────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(245,247,250,.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .nav.scrolled {
+      border-bottom-color: var(--stone);
+      box-shadow: 0 1px 20px rgba(28,16,8,.06);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -.02em;
+    }
+    .nav-logo span { color: var(--coral); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--coral); }
+
+    .nav-cta {
+      background: var(--coral) !important;
+      color: var(--white) !important;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      font-size: .85rem !important;
+      transition: background .2s, transform .2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--coral-dark) !important;
+      transform: translateY(-1px);
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Warm gradient blob backgrounds */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -180px;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,144,226,.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(126,211,33,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(74,144,226,.1);
+      border: 1px solid rgba(74,144,226,.2);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 24px;
+      animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-label::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--coral);
+      animation: shimmer 2s infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      margin-bottom: 24px;
+      animation: fadeUp .7s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--coral);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--ink-muted);
+      max-width: 460px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+      animation: fadeUp .7s .18s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      animation: fadeUp .7s .26s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--coral);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(74,144,226,.35);
+    }
+    .btn-primary:hover {
+      background: var(--coral-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(74,144,226,.40);
+    }
+    .btn-primary svg { flex-shrink: 0; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 15px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 1.5px solid var(--stone);
+      cursor: pointer;
+      transition: border-color .2s, color .2s, transform .2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--coral);
+      color: var(--coral);
+      transform: translateY(-1px);
+    }
+
+    /* Hero visual - two homes metaphor */
+    .hero-visual {
+      position: relative;
+      height: 480px;
+      animation: scaleIn .8s .3s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    .hero-card {
+      position: absolute;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      padding: 20px;
+      border: 1px solid rgba(74,144,226,.08);
+    }
+
+    .hero-card-main {
+      width: 280px;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: floatA 6s ease-in-out infinite;
+    }
+
+    .hero-card-b {
+      width: 200px;
+      bottom: 60px;
+      left: 0;
+      animation: floatB 7s .5s ease-in-out infinite;
+    }
+
+    .hero-card-c {
+      width: 180px;
+      bottom: 80px;
+      right: 0;
+      animation: floatA 8s 1s ease-in-out infinite;
+    }
+
+    /* Mini UI card content */
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .card-icon-wrap {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-icon-wrap.coral { background: rgba(74,144,226,.12); }
+    .card-icon-wrap.amber { background: rgba(126,211,33,.12); }
+    .card-icon-wrap.green { background: rgba(52,168,83,.12); }
+    .card-icon-wrap.blue  { background: rgba(66,133,244,.12); }
+
+    .card-badge {
+      font-size: .65rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+    .badge-green { background: rgba(52,168,83,.12); color: #34A853; }
+    .badge-amber { background: rgba(126,211,33,.14); color: #558B2F; }
+
+    .card-title { font-size: .8rem; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+    .card-sub   { font-size: .7rem; color: var(--ink-muted); }
+
+    .mini-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      margin-top: 12px;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      border-radius: 5px;
+      font-size: .6rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-muted);
+    }
+    .cal-day.a { background: rgba(74,144,226,.15); color: var(--coral); }
+    .cal-day.b { background: rgba(66,133,244,.12); color: #4285F4; }
+    .cal-day.today { background: var(--coral); color: white; }
+
+    .expense-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--sand);
+    }
+    .expense-row:last-child { border-bottom: none; }
+    .exp-label { font-size: .72rem; font-weight: 500; color: var(--ink); }
+    .exp-amount { font-size: .72rem; font-weight: 700; color: var(--coral); }
+
+    .progress-label { font-size: .7rem; color: var(--ink-muted); margin-bottom: 6px; }
+    .progress-track {
+      height: 6px;
+      background: var(--sand);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--coral), var(--amber));
+      border-radius: 3px;
+    }
+
+    .notif-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+    }
+    .notif-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .notif-text { font-size: .7rem; color: var(--ink-soft); line-height: 1.4; }
+    .notif-time { font-size: .62rem; color: var(--ink-muted); }
+
+    /* ─── Pain points ────────────────────────────────────────────── */
+    .pain-section {
+      background: var(--ink);
+      color: var(--white);
+      padding: var(--section-py) 0;
+    }
+
+    .pain-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .pain-header .label { color: rgba(74,144,226,.9); }
+    .pain-header h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+      color: var(--white);
+      margin-top: 12px;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    .pain-card {
+      padding: 40px 36px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+      transition: background .3s;
+    }
+    .pain-card:hover { background: rgba(255,255,255,.07); }
+    .pain-card:first-child { border-radius: var(--radius-md) 0 0 0; }
+    .pain-card:nth-child(2) { border-radius: 0 var(--radius-md) 0 0; }
+    .pain-card:nth-child(3) { border-radius: 0 0 0 var(--radius-md); }
+    .pain-card:last-child { border-radius: 0 0 var(--radius-md) 0; }
+
+    .pain-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: rgba(74,144,226,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .pain-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .pain-card p {
+      font-size: .9rem;
+      color: rgba(255,255,255,.55);
+      line-height: 1.65;
+    }
+
+    /* ─── Features ───────────────────────────────────────────────── */
+    .features-section { padding: var(--section-py) 0; background: var(--cream); }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-header h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+      margin-top: 12px;
+    }
+    .section-header p {
+      margin-top: 16px;
+      font-size: 1.05rem;
+      color: var(--ink-muted);
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      border: 1px solid var(--stone);
+      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s, border-color .25s;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(74,144,226,.15);
+    }
+
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .fi-coral  { background: rgba(74,144,226,.1); }
+    .fi-amber  { background: rgba(126,211,33,.12); }
+    .fi-green  { background: rgba(52,168,83,.10); }
+    .fi-blue   { background: rgba(66,133,244,.10); }
+    .fi-purple { background: rgba(156,106,222,.10); }
+    .fi-teal   { background: rgba(0,172,193,.10); }
+    .fi-rose   { background: rgba(236,72,153,.10); }
+    .fi-slate  { background: rgba(100,116,139,.10); }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+    .feature-card p {
+      font-size: .88rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--coral);
+      background: rgba(74,144,226,.08);
+      padding: 4px 10px;
+      border-radius: 50px;
+    }
+
+    /* ─── For Who ────────────────────────────────────────────────── */
+    .forwhom-section {
+      padding: var(--section-py) 0;
+      background: linear-gradient(160deg, var(--sand) 0%, var(--cream) 100%);
+    }
+
+    .forwhom-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .persona-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      text-align: center;
+      border: 1px solid var(--stone);
+      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .persona-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--coral), var(--amber));
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .persona-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+    .persona-card:hover::before { opacity: 1; }
+
+    .persona-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--sand);
+    }
+
+    .persona-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+    .persona-card p {
+      font-size: .88rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+    }
+
+    /* ─── Stats ──────────────────────────────────────────────────── */
+    .stats-section {
+      padding: var(--section-py) 0;
+      background: var(--white);
+    }
+
+    .stats-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .stats-text h2 {
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      margin-bottom: 20px;
+    }
+    .stats-text p {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: var(--cream);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      border: 1px solid var(--stone);
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--coral);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: .85rem;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    /* ─── CTA Section ────────────────────────────────────────────── */
+    .cta-section {
+      padding: var(--section-py) 0;
+      background: var(--cream);
+    }
+
+    .cta-box {
+      background: var(--ink);
+      border-radius: var(--radius-xl);
+      padding: 72px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,144,226,.25) 0%, transparent 60%);
+    }
+    .cta-box::after {
+      content: '';
+      position: absolute;
+      bottom: -150px; left: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(126,211,33,.15) 0%, transparent 60%);
+    }
+
+    .cta-box > * { position: relative; z-index: 1; }
+
+    .cta-box .label { color: rgba(74,144,226,.9); }
+    .cta-box h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+      color: var(--white);
+      margin: 16px 0 20px;
+    }
+    .cta-box p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.6);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    }
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+    }
+
+    .btn-outline-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: rgba(255,255,255,.8);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 15px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,.25);
+      transition: border-color .2s, color .2s;
+    }
+    .btn-outline-white:hover {
+      border-color: rgba(255,255,255,.6);
+      color: var(--white);
+    }
+
+    .cta-note {
+      margin-top: 20px;
+      font-size: .8rem;
+      color: rgba(255,255,255,.35);
+    }
+    .cta-note strong { color: rgba(74,144,226,.7); }
+
+    /* ─── Footer ─────────────────────────────────────────────────── */
+    .footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.4);
+      padding: 40px 24px;
+    }
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.7);
+    }
+    .footer-logo span { color: var(--coral); }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: .85rem;
+      color: rgba(255,255,255,.4);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,.7); }
+    .footer-copy { font-size: .8rem; }
+
+    /* ─── Mobile Nav overlay ─────────────────────────────────────── */
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0; bottom: 0;
+      background: rgba(245,247,250,.97);
+      backdrop-filter: blur(16px);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-mobile-menu a:hover { color: var(--coral); }
+
+    /* ─── Divider ornament ───────────────────────────────────────── */
+    .divider-ornament {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .divider-ornament svg { opacity: .25; }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      :root { --section-py: 72px; }
+
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        text-align: center;
+      }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { height: 360px; }
+      .hero-card-main { width: 240px; }
+      .hero-card-b { width: 170px; left: -10px; }
+      .hero-card-c { width: 160px; right: -10px; }
+
+      .pain-grid { grid-template-columns: 1fr; gap: 1px; }
+      .pain-card:first-child  { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+      .pain-card:nth-child(2) { border-radius: 0; }
+      .pain-card:nth-child(3) { border-radius: 0; }
+      .pain-card:last-child   { border-radius: 0 0 var(--radius-md) var(--radius-md); }
+
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .forwhom-grid  { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+      .stats-inner   { grid-template-columns: 1fr; gap: 40px; }
+      .cta-box { padding: 48px 28px; border-radius: var(--radius-lg); }
+    }
+
+    @media (max-width: 600px) {
+      :root { --section-py: 56px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .stats-grid    { grid-template-columns: 1fr; }
+      .hero-visual   { height: 300px; }
+      .hero-card-main { width: 210px; }
+      .hero-card-b, .hero-card-c { display: none; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navbar ─────────────────────────────────────────────────── -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Navigation principale">
+    <a href="#" class="nav-logo">Parenta<span>Link</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+      <li><a href="#pour-qui">Pour qui ?</a></li>
+      <li><a href="#chiffres">Chiffres</a></li>
+      <li><a href="https://forms.gle/eHTDpgPu1pT7MRVV8" target="_blank" rel="noopener" class="nav-cta">Rejoindre la bêta</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="nav-mobile-menu" id="mobileMenu" role="dialog" aria-label="Menu mobile">
+    <a href="#fonctionnalites" onclick="closeMobileMenu()">Fonctionnalités</a>
+    <a href="#pour-qui" onclick="closeMobileMenu()">Pour qui ?</a>
+    <a href="#chiffres" onclick="closeMobileMenu()">Chiffres</a>
+    <a href="https://forms.gle/eHTDpgPu1pT7MRVV8" target="_blank" rel="noopener" onclick="closeMobileMenu()" style="color:var(--coral)">Rejoindre la bêta</a>
+  </div>
+
+  <!-- ─── Hero ───────────────────────────────────────────────────── -->
+  <main>
+  <section class="hero" aria-label="Introduction">
+    <div class="hero-inner container">
+      <!-- Left column -->
+      <div class="hero-text">
+        <div class="hero-label">
+          Bêta en cours
+        </div>
+        <h1 class="display hero-title">
+          Deux foyers,<br>
+          <em>une seule famille.</em>
+        </h1>
+        <p class="hero-sub">
+          ParentaLink réunit tout ce dont deux parents séparés ont besoin : planning de garde, dépenses, documents et règles éducatives — synchronisés en temps réel.
+        </p>
+        <div class="hero-actions">
+          <a href="https://forms.gle/eHTDpgPu1pT7MRVV8" target="_blank" rel="noopener" class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 5.53 5.53l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z"></path></svg>
+            Rejoindre la bêta
+          </a>
+          <a href="#fonctionnalites" class="btn-secondary">
+            Voir les fonctionnalités
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right column — floating UI cards -->
+      <div class="hero-visual" aria-hidden="true">
+
+        <!-- Main card: calendar -->
+        <div class="hero-card hero-card-main">
+          <div class="card-header-row">
+            <div class="card-icon-wrap coral">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <span class="card-badge badge-green">Semaine en cours</span>
+          </div>
+          <div class="card-title">Planning de garde — Mars 2026</div>
+          <div class="card-sub">Chez Maman · 3 jours restants</div>
+          <div class="mini-calendar">
+            <div class="cal-day">L</div><div class="cal-day">M</div><div class="cal-day">M</div>
+            <div class="cal-day">J</div><div class="cal-day">V</div><div class="cal-day">S</div><div class="cal-day">D</div>
+            <div class="cal-day b">17</div><div class="cal-day b">18</div><div class="cal-day today">19</div>
+            <div class="cal-day a">20</div><div class="cal-day a">21</div><div class="cal-day a">22</div><div class="cal-day a">23</div>
+            <div class="cal-day b">24</div><div class="cal-day b">25</div><div class="cal-day b">26</div>
+            <div class="cal-day a">27</div><div class="cal-day a">28</div><div class="cal-day a">29</div><div class="cal-day a">30</div>
+          </div>
+        </div>
+
+        <!-- Card B: expenses -->
+        <div class="hero-card hero-card-b">
+          <div class="card-header-row">
+            <div class="card-icon-wrap amber">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7ED321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <span class="card-badge badge-amber">Ce mois</span>
+          </div>
+          <div class="card-title">Dépenses</div>
+          <div class="expense-row">
+            <span class="exp-label">École</span>
+            <span class="exp-amount">84 €</span>
+          </div>
+          <div class="expense-row">
+            <span class="exp-label">Sport</span>
+            <span class="exp-amount">45 €</span>
+          </div>
+          <div style="margin-top:10px">
+            <div class="progress-label">Équilibre · 62 %</div>
+            <div class="progress-track"><div class="progress-fill" style="width:62%"></div></div>
+          </div>
+        </div>
+
+        <!-- Card C: notification -->
+        <div class="hero-card hero-card-c">
+          <div class="card-title" style="margin-bottom:12px">Notifications</div>
+          <div class="notif-item">
+            <div class="notif-dot" style="background:#34A853"></div>
+            <div>
+              <div class="notif-text">Léa a mis à jour les règles de coucher</div>
+              <div class="notif-time">Il y a 5 min</div>
+            </div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-dot" style="background:var(--coral)"></div>
+            <div>
+              <div class="notif-text">Rappel : Médecin demain 14h</div>
+              <div class="notif-time">Il y a 1h</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Pain Points ───────────────────────────────────────────── -->
+  <section class="pain-section" aria-label="Problèmes résolus">
+    <div class="container">
+      <div class="pain-header reveal">
+        <div class="label">Le problème</div>
+        <h2 class="display">La co-parentalité, c'est compliqué.<br>Ce n'est pas une fatalité.</h2>
+      </div>
+      <div class="pain-grid">
+        <div class="pain-card reveal delay-1">
+          <div class="pain-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Des règles contradictoires entre foyers</h3>
+          <p>L'heure du coucher chez papa, le temps d'écran chez maman — sans coordination, les enfants jouent sur les différences et l'autorité s'effrite.</p>
+        </div>
+        <div class="pain-card reveal delay-2">
+          <div class="pain-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <h3>Documents éparpillés aux mauvais moments</h3>
+          <p>Carnet de santé introuvable aux urgences, CNI oubliée pour la sortie scolaire — les documents critiques de vos enfants méritent mieux qu'un fil WhatsApp.</p>
+        </div>
+        <div class="pain-card reveal delay-3">
+          <div class="pain-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </div>
+          <h3>Aucune visibilité sur l'autre foyer</h3>
+          <p>Votre enfant a un rendez-vous chez le médecin, un devoir à rendre, un anniversaire de copain — et vous l'apprenez au dernier moment par un SMS.</p>
+        </div>
+        <div class="pain-card reveal delay-4">
+          <div class="pain-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Les dépenses, source de conflits permanents</h3>
+          <p>Qui a payé les fournitures scolaires ? Qui doit rembourser les activités du mois ? Sans suivi commun, chaque dépense devient un terrain de tension.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Features ─────────────────────────────────────────────── -->
+  <section class="features-section" id="fonctionnalites" aria-label="Fonctionnalités">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="label">Fonctionnalités</div>
+        <h2 class="display">Tout ce dont deux foyers ont besoin</h2>
+        <p>De la garde aux dépenses, en passant par les règles éducatives — ParentaLink couvre l'intégralité du quotidien co-parental.</p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card reveal delay-1">
+          <div class="feature-icon fi-coral">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <h3>Planning de garde</h3>
+          <p>Visualisez qui a la garde à tout moment. Indicateur du foyer actuel, alternance automatique, transitions en un coup d'oeil.</p>
+          <span class="feature-tag">Garde alternée</span>
+        </div>
+
+        <div class="feature-card reveal delay-2">
+          <div class="feature-icon fi-blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          </div>
+          <h3>Calendrier partagé</h3>
+          <p>Événements familiaux synchronisés avec récurrence hebdomadaire ou bimensuelle, rappels intelligents selon le foyer et notifications push.</p>
+          <span class="feature-tag">Notifications push</span>
+        </div>
+
+        <div class="feature-card reveal delay-3">
+          <div class="feature-icon fi-amber">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7ED321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Dépenses partagées</h3>
+          <p>Suivez les dépenses par catégorie, visualisez l'équilibre entre parents, consultez les stats mensuelles et exportez en PDF.</p>
+          <span class="feature-tag">Export PDF</span>
+        </div>
+
+        <div class="feature-card reveal delay-4">
+          <div class="feature-icon fi-green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34A853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <h3>Documents partagés</h3>
+          <p>CNI, carnet de santé, attestations — tous les documents importants de vos enfants stockés et accessibles depuis les deux foyers, en tout temps.</p>
+          <span class="feature-tag">Stockage sécurisé</span>
+        </div>
+
+        <div class="feature-card reveal delay-5">
+          <div class="feature-icon fi-purple">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9C6ADE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Règles éducatives</h3>
+          <p>Définissez des règles globales ou par enfant, avec déclencheur configurable et réinitialisation automatique. Une cohérence éducative entre les deux foyers.</p>
+          <span class="feature-tag">Par enfant</span>
+        </div>
+
+        <div class="feature-card reveal delay-6">
+          <div class="feature-icon fi-rose">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Familles recomposées</h3>
+          <p>Attribuez des rôles précis pour chaque enfant — parent, beau-parent, et plus. ParentaLink s'adapte à la réalité de votre famille, quelle que soit sa structure.</p>
+          <span class="feature-tag">Rôles flexibles</span>
+        </div>
+
+        <div class="feature-card reveal delay-7">
+          <div class="feature-icon fi-teal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ACC1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <h3>Notifications push</h3>
+          <p>Chaque mise à jour — garde, événement, dépense, règle — déclenche une notification en temps réel chez l'autre parent. Zéro information perdue.</p>
+          <span class="feature-tag">Temps réel</span>
+        </div>
+
+        <div class="feature-card reveal delay-8">
+          <div class="feature-icon fi-slate">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+          <h3>Mode sombre</h3>
+          <p>Interface soignée en mode clair et en mode sombre, pour un confort visuel à toute heure. L'application s'adapte à vos préférences système.</p>
+          <span class="feature-tag">iOS &amp; Android</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── For Who ───────────────────────────────────────────────── -->
+  <section class="forwhom-section" id="pour-qui" aria-label="Pour qui">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="label">Pour qui</div>
+        <h2 class="display">Conçu pour votre réalité</h2>
+        <p>Quelle que soit la configuration de votre famille, ParentaLink s'adapte à votre quotidien.</p>
+      </div>
+      <div class="forwhom-grid">
+
+        <div class="persona-card reveal delay-1">
+          <div class="persona-avatar">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3>Parents séparés ou divorcés</h3>
+          <p>Vous partagez la garde de vos enfants et souhaitez une coordination fluide, sans que chaque échange ne vire au désaccord. ParentaLink centralise tout.</p>
+        </div>
+
+        <div class="persona-card reveal delay-2">
+          <div class="persona-avatar">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7ED321" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Garde alternée</h3>
+          <p>Une semaine sur deux, ou selon une alternance plus complexe — le planning de garde s'adapte à votre calendrier et garde les deux foyers synchronisés.</p>
+        </div>
+
+        <div class="persona-card reveal delay-3">
+          <div class="persona-avatar">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#34A853" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3>Familles recomposées</h3>
+          <p>Beaux-parents, demi-frères et soeurs — gérez les rôles et les droits de chaque adulte impliqué dans la vie de vos enfants avec précision et bienveillance.</p>
+        </div>
+
+        <div class="persona-card reveal delay-4">
+          <div class="persona-avatar">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1976D2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3>Parents souvent absents</h3>
+          <p>Militaires, déplacements professionnels réguliers — restez connecté au quotidien de vos enfants même à distance. Suivez tout en temps réel, où que vous soyez.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Stats ─────────────────────────────────────────────────── -->
+  <section class="stats-section" id="chiffres" aria-label="Chiffres clés">
+    <div class="container">
+      <div class="stats-inner">
+        <div class="stats-text reveal">
+          <div class="label">Pourquoi c'est important</div>
+          <h2 class="display">Un enjeu qui touche des millions de familles françaises</h2>
+          <p>La séparation des parents est une réalité quotidienne pour une part croissante des familles en France. Les enfants concernés méritent une coordination à la hauteur.</p>
+          <p>ParentaLink est conçu pour ce contexte — pas comme un outil généraliste, mais comme une solution dédiée aux familles qui naviguent entre deux foyers.</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card reveal delay-1">
+            <div class="stat-number">25%</div>
+            <div class="stat-label">des familles françaises sont monoparentales ou en co-parentalité</div>
+          </div>
+          <div class="stat-card reveal delay-2">
+            <div class="stat-number">480k</div>
+            <div class="stat-label">enfants vivent en garde alternée en France chaque année</div>
+          </div>
+          <div class="stat-card reveal delay-3">
+            <div class="stat-number">2×</div>
+            <div class="stat-label">plus de conflits liés aux dépenses chez les parents sans outil partagé</div>
+          </div>
+          <div class="stat-card reveal delay-4">
+            <div class="stat-number">1</div>
+            <div class="stat-label">application pour tout centraliser et redonner de la sérénité</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ───────────────────────────────────────────────────── -->
+  <section class="cta-section" aria-label="Appel à l'action">
+    <div class="container">
+      <div class="cta-box reveal">
+        <div class="label">Accès bêta</div>
+        <h2 class="display">Rejoignez les premiers utilisateurs.</h2>
+        <p>ParentaLink est en bêta active. Partagez-nous votre retour et aidez-nous à construire l'application dont vous avez besoin. Les premiers répondants auront accès en priorité.</p>
+        <div class="cta-actions">
+          <a href="https://forms.gle/JDQGocMbsMxQo3kN9" target="_blank" rel="noopener" class="btn-white">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Donner mon avis
+          </a>
+          <a href="https://forms.gle/eHTDpgPu1pT7MRVV8" target="_blank" rel="noopener" class="btn-outline-white">
+            Rejoindre la bêta
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <p class="cta-note">Accès prioritaire pour les <strong>premiers répondants</strong> · Gratuit pendant la bêta</p>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- ─── Footer ────────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-logo">Parenta<span>Link</span></div>
+      <ul class="footer-links" role="list">
+        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+        <li><a href="#pour-qui">Pour qui</a></li>
+        <li><a href="mailto:jordan.ollivier@gmail.com">Contact</a></li>
+      </ul>
+      <div class="footer-copy">
+        <a href="mailto:jordan.ollivier@gmail.com" style="color:inherit;text-decoration:none">jordan.ollivier@gmail.com</a>
+        &nbsp;·&nbsp; &copy; 2026 ParentaLink
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Navbar scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ── Mobile menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      hamburger.setAttribute('aria-expanded', menuOpen);
+      mobileMenu.classList.toggle('open', menuOpen);
+      document.body.style.overflow = menuOpen ? 'hidden' : '';
+    });
+
+    function closeMobileMenu() {
+      menuOpen = false;
+      hamburger.setAttribute('aria-expanded', false);
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
