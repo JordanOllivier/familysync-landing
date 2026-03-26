@@ -213,12 +213,18 @@
     }
 
     .hero-logo {
-      width: min(800px, 50vw);
+      width: 100%;
+      max-width: 500px;
+      margin-left: -20px;
       margin-bottom: 32px;
+      display: block;
       animation: fadeUp .8s cubic-bezier(.22,1,.36,1) both;
     }
+    @media (max-width: 900px) {
+      .hero-logo { max-width: 360px; margin: 0 auto 24px; }
+    }
     @media (max-width: 600px) {
-      .hero-logo { width: min(300px, 80vw); margin-bottom: 20px; }
+      .hero-logo { max-width: 300px; margin: 0 auto 20px; }
     }
 
     /* ─── Hero ───────────────────────────────────────────────────── */
@@ -942,7 +948,7 @@
       .hero-visual   { height: 300px; }
       .hero-card-main { width: 210px; }
       .hero-card-b, .hero-card-c { display: none; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
     }
   </style>
 </head>
