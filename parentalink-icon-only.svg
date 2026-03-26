@@ -1,0 +1,13 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Version icône pure - background transparent -->
+  <g>
+    <!-- Maison gauche -->
+    <path fill="none" stroke="#4A90E2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" d="M 90 190 L 90 260 L 150 260 L 150 190 M 75 190 L 120 145 L 165 190"/>
+    
+    <!-- Maison droite -->
+    <path fill="none" stroke="#7ED321" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" d="M 250 190 L 250 260 L 310 260 L 310 190 M 235 190 L 280 145 L 325 190"/>
+    
+    <!-- Arc -->
+    <path fill="none" stroke="#4A90E2" stroke-width="6" stroke-linecap="round" d="M 165 225 Q 200 245 235 225"/>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .logo-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 500; fill: #1a1a1a; }
+    .logo-baseline { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 400; fill: #666; font-size: 14px; }
+    .structure { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+    .left { stroke: #4A90E2; }
+    .right { stroke: #7ED321; }
+    .link { stroke: #4A90E2; stroke-width: 6; fill: none; stroke-linecap: round; }
+  </style>
+  
+  <!-- Maison gauche -->
+  <path class="structure left" d="M 90 130 L 90 190 L 145 190 L 145 130 M 77 130 L 117.5 92 L 158 130"/>
+  
+  <!-- Maison droite -->
+  <path class="structure right" d="M 535 130 L 535 190 L 590 190 L 590 130 M 522 130 L 562.5 92 L 603 130"/>
+  
+  <!-- Arc -->
+  <path class="link" d="M 158 160 Q 340 185 522 160"/>
+  
+  <!-- Nom -->
+  <text class="logo-text" x="340" y="235" text-anchor="middle" font-size="36">Parentalink</text>
+  
+  <!-- Baseline -->
+  <text class="logo-baseline" x="340" y="260" text-anchor="middle">Le lien entre vos deux foyers</text>
+</svg>

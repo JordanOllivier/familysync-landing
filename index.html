@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://parentalink.com">
   <meta name="theme-color" content="#4A90E2">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -154,14 +154,18 @@
     }
 
     .nav-logo {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--ink);
       text-decoration: none;
-      letter-spacing: -.02em;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity .4s ease, transform .4s ease;
+      pointer-events: none;
     }
-    .nav-logo span { color: var(--coral); }
+    .nav-logo img { height: 50px; display: block; }
+    .nav.scrolled .nav-logo {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
 
     .nav-links {
       display: flex;
@@ -206,6 +210,15 @@
       background: var(--ink);
       border-radius: 2px;
       transition: transform .3s, opacity .3s;
+    }
+
+    .hero-logo {
+      width: min(800px, 50vw);
+      margin-bottom: 32px;
+      animation: fadeUp .8s cubic-bezier(.22,1,.36,1) both;
+    }
+    @media (max-width: 600px) {
+      .hero-logo { width: min(300px, 80vw); margin-bottom: 20px; }
     }
 
     /* ─── Hero ───────────────────────────────────────────────────── */
@@ -826,8 +839,9 @@
 
     /* ─── Footer ─────────────────────────────────────────────────── */
     .footer {
-      background: var(--ink);
-      color: rgba(255,255,255,.4);
+      background: var(--white);
+      color: var(--ink-muted);
+      border-top: 1px solid var(--stone);
       padding: 40px 24px;
     }
     .footer-inner {
@@ -853,11 +867,11 @@
     }
     .footer-links a {
       font-size: .85rem;
-      color: rgba(255,255,255,.4);
+      color: var(--ink-muted);
       text-decoration: none;
       transition: color .2s;
     }
-    .footer-links a:hover { color: rgba(255,255,255,.7); }
+    .footer-links a:hover { color: var(--coral); }
     .footer-copy { font-size: .8rem; }
 
     /* ─── Mobile Nav overlay ─────────────────────────────────────── */
@@ -936,7 +950,7 @@
 
   <!-- ─── Navbar ─────────────────────────────────────────────────── -->
   <nav class="nav" id="nav" role="navigation" aria-label="Navigation principale">
-    <a href="#" class="nav-logo">Parenta<span>Link</span></a>
+    <a href="#" class="nav-logo"><img src="logo.svg" alt="ParentaLink" height="40"></a>
     <ul class="nav-links" role="list">
       <li><a href="#fonctionnalites">Fonctionnalités</a></li>
       <li><a href="#pour-qui">Pour qui ?</a></li>
@@ -962,6 +976,7 @@
     <div class="hero-inner container">
       <!-- Left column -->
       <div class="hero-text">
+        <img src="logo-baseline.svg" alt="ParentaLink - Le lien entre vos deux foyers" class="hero-logo" id="heroLogo">
         <div class="hero-label">
           Bêta en cours
         </div>
@@ -1284,7 +1299,7 @@
   <!-- ─── Footer ────────────────────────────────────────────────── -->
   <footer class="footer" role="contentinfo">
     <div class="footer-inner">
-      <div class="footer-logo">Parenta<span>Link</span></div>
+      <div class="footer-logo"><img src="logo.svg" alt="ParentaLink" height="105"></div>
       <ul class="footer-links" role="list">
         <li><a href="#fonctionnalites">Fonctionnalités</a></li>
         <li><a href="#pour-qui">Pour qui</a></li>
@@ -1298,11 +1313,15 @@
   </footer>
 
   <script>
-    // ── Navbar scroll state
+    // ── Navbar scroll state (triggered when hero logo leaves viewport)
     const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 20);
-    }, { passive: true });
+    const heroLogo = document.getElementById('heroLogo');
+    const logoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        nav.classList.toggle('scrolled', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    logoObserver.observe(heroLogo);
 
     // ── Mobile menu toggle
     const hamburger = document.getElementById('hamburger');

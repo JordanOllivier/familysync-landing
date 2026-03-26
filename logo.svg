@@ -1,0 +1,21 @@
+<svg viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .logo-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 500; fill: #1a1a1a; }
+    .structure { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+    .left { stroke: #4A90E2; }
+    .right { stroke: #7ED321; }
+    .link { stroke: #4A90E2; stroke-width: 6; fill: none; stroke-linecap: round; }
+  </style>
+  
+  <!-- Maison gauche -->
+  <path class="structure left" d="M 90 140 L 90 200 L 145 200 L 145 140 M 77 140 L 117.5 102 L 158 140"/>
+  
+  <!-- Maison droite -->
+  <path class="structure right" d="M 535 140 L 535 200 L 590 200 L 590 140 M 522 140 L 562.5 102 L 603 140"/>
+  
+  <!-- Arc -->
+  <path class="link" d="M 158 170 Q 340 195 522 170"/>
+  
+  <!-- Nom -->
+  <text class="logo-text" x="340" y="245" text-anchor="middle" font-size="36">Parentalink</text>
+</svg>
