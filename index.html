@@ -13,7 +13,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     /* ─── Reset ──────────────────────────────────────────────── */
@@ -21,30 +21,30 @@
     html { scroll-behavior: smooth; }
 
     :root {
-      /* App brand */
-      --blue:        #4A90E2;
-      --blue-deep:   #1E6FCB;
-      --blue-soft:   #EAF3FC;
-      --green:       #7ED321;
-      --green-deep:  #5BA013;
-      --green-soft:  #F0F9E1;
-      --amber:       #F5A623;
+      /* Brand — notarial ink, ledger paper, institutional navy, sealed green */
+      --blue:        #2E6099;
+      --blue-deep:   #1B3A5B;
+      --blue-soft:   #E7EEF5;
+      --green:       #2E7D55;
+      --green-deep:  #1F5B43;
+      --green-soft:  #E4EFE7;
+      --amber:       #A9781F;
 
-      /* Surface — clean white + subtle nuance */
+      /* Surface — cool ledger paper + ink */
       --bg:          #FFFFFF;
-      --bg-2:        #F6F6F4;
-      --bg-3:        #ECECEA;
-      --ink:         #0E0E0C;
-      --ink-soft:    #2A2A28;
-      --ink-muted:   #6E6E68;
-      --ink-light:   #ABABA5;
-      --line:        #E5E5E0;
-      --line-soft:   #EFEFEC;
+      --bg-2:        #F4F5F3;
+      --bg-3:        #E8E9E6;
+      --ink:         #14171C;
+      --ink-soft:    #2B3038;
+      --ink-muted:   #646A73;
+      --ink-light:   #A2A6AD;
+      --line:        #E3E4E0;
+      --line-soft:   #EEEFEC;
 
-      /* Type */
-      --font-display: 'Bricolage Grotesque', -apple-system, sans-serif;
-      --font-body:    'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono:    'Geist Mono', ui-monospace, monospace;
+      /* Type — serif authority, neutral body, mono for the registry data */
+      --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
+      --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono:    'IBM Plex Mono', ui-monospace, monospace;
 
       --max-w:        1280px;
       --gutter:       40px;
@@ -75,9 +75,8 @@
     .display {
       font-family: var(--font-display);
       font-weight: 500;
-      font-variation-settings: "opsz" 96;
-      letter-spacing: -0.035em;
-      line-height: 0.96;
+      letter-spacing: -0.012em;
+      line-height: 1.03;
       color: var(--ink);
     }
 
@@ -1149,11 +1148,11 @@
     <div class="nav-inner">
       <a href="#" class="nav-brand" aria-label="ParentaLink">
         <svg class="nav-mark" viewBox="0 0 680 280" aria-hidden="true">
-          <path fill="none" stroke="#4A90E2" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
+          <path fill="none" stroke="#1B3A5B" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
                 d="M 90 140 L 90 200 L 145 200 L 145 140 M 77 140 L 117.5 102 L 158 140"/>
-          <path fill="none" stroke="#7ED321" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
+          <path fill="none" stroke="#2E7D55" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
                 d="M 535 140 L 535 200 L 590 200 L 590 140 M 522 140 L 562.5 102 L 603 140"/>
-          <path fill="none" stroke="#4A90E2" stroke-width="18" stroke-linecap="round"
+          <path fill="none" stroke="#1B3A5B" stroke-width="18" stroke-linecap="round"
                 d="M 158 170 Q 340 195 522 170"/>
         </svg>
         <span class="nav-name">ParentaLink</span>
@@ -1200,7 +1199,7 @@
         </h1>
 
         <p class="hero-lede">
-          ParentaLink est le carnet des parents séparés. Vous y consignez au fil de l'eau les faits, les échanges et les frais. Chaque entrée est datée et scellée — impossible à modifier après coup. Le jour où ça compte, vous arrivez avec un dossier déjà constitué.
+          ParentaLink est le carnet des parents séparés. Vous y consignez au fil de l'eau les faits, les échanges et les frais. Chaque entrée est datée et scellée — impossible à modifier après coup. Le jour où ça compte — devant un avocat, un médiateur ou le juge aux affaires familiales — vous arrivez avec un dossier déjà constitué.
         </p>
 
         <div class="stores">
@@ -1250,7 +1249,7 @@
         <!-- Foreground phone -->
         <div class="phone phone-fallback" aria-hidden="true">
           <div class="phone-screen">
-            <img src="screens/calendar.png" alt="ParentaLink — vue calendrier"
+            <img src="screens/calendar.png" alt="ParentaLink — Mon Carnet, le registre des faits daté et scellé"
                  onerror="this.parentElement.classList.add('show-fallback');this.style.display='none'">
             <div class="phone-fallback-content" style="display:none">
               <div class="phone-notch"></div>
@@ -1315,7 +1314,7 @@
       </div>
       <div class="strip-item">
         <span class="strip-num">Horodaté</span>
-        <span class="strip-label">Ancré via OpenTimestamps</span>
+        <span class="strip-label">Vérifiable par un tiers</span>
       </div>
       <div class="strip-item">
         <span class="strip-num">Export PDF</span>
@@ -1354,7 +1353,7 @@
           </li>
           <li>
             <span class="num">C</span>
-            <span class="text"><strong>Un horodatage indépendant.</strong>L'empreinte du carnet est ancrée via OpenTimestamps — de quoi démontrer qu'une donnée existait à une date donnée.</span>
+            <span class="text"><strong>Un horodatage indépendant.</strong>La date de chaque entrée peut être vérifiée par un tiers — de quoi démontrer qu'une donnée existait bien à un moment donné.</span>
           </li>
           <li>
             <span class="num">D</span>
@@ -1391,7 +1390,7 @@
           <div class="show-art">
             <div class="show-frame phone-fallback">
               <div class="phone-screen">
-                <img src="screens/calendar.png" alt="ParentaLink — vue calendrier"
+                <img src="screens/calendar.png" alt="ParentaLink — journal des faits, entrées datées et scellées"
                      onerror="this.parentElement.classList.add('show-fallback');this.style.display='none'">
                 <div class="phone-fallback-content" style="display:none">
                   <div class="phone-notch"></div>
@@ -1432,7 +1431,7 @@
           <div class="show-art">
             <div class="show-frame phone-fallback">
               <div class="phone-screen">
-                <img src="screens/expenses.png" alt="ParentaLink — dépenses"
+                <img src="screens/expenses.png" alt="ParentaLink — frais avec justificatifs, solde calculé"
                      onerror="this.parentElement.classList.add('show-fallback');this.style.display='none'">
                 <div class="phone-fallback-content" style="display:none;background:var(--ink);height:100%;color:var(--bg);padding:60px 18px 18px">
                   <h4 style="color:var(--bg);font-family:var(--font-display);font-size:1.2rem">Dépenses</h4>
@@ -1463,7 +1462,7 @@
           <div class="show-art">
             <div class="show-frame phone-fallback">
               <div class="phone-screen">
-                <img src="screens/documents.png" alt="ParentaLink — documents"
+                <img src="screens/documents.png" alt="ParentaLink — dossier de l'enfant, pièces classées et datées"
                      onerror="this.parentElement.classList.add('show-fallback');this.style.display='none'">
                 <div class="phone-fallback-content" style="display:none;height:100%;padding:60px 18px 18px">
                   <h4 style="font-family:var(--font-display);font-size:1.2rem">Documents</h4>
@@ -1497,14 +1496,14 @@
           <p>Chaque entrée reçoit une empreinte calculée à partir de son contenu et de la précédente. Toute altération d'une entrée passée rendrait la chaîne incohérente — donc détectable.</p>
         </div>
         <div class="compact-feat rv rv-d1">
-          <div class="compact-num">05 — Horodatage OpenTimestamps</div>
+          <div class="compact-num">05 — Horodatage indépendant</div>
           <h4>Une date qui ne dépend pas de vous.</h4>
-          <p>L'empreinte du registre est ancrée via OpenTimestamps, un procédé public et indépendant. Il démontre qu'une donnée existait à une date donnée — sans horodatage qualifié eIDAS.</p>
+          <p>Chaque entrée est ancrée sur un horodatage public et indépendant. N'importe qui — vous, votre avocat, un juge — peut vérifier qu'une donnée existait bien à une date donnée, sans avoir à vous croire sur parole.</p>
         </div>
         <div class="compact-feat rv rv-d2">
           <div class="compact-num">06 — Export PDF</div>
           <h4>Un dossier prêt à transmettre.</h4>
-          <p>Exportez tout ou partie du carnet en un PDF ordonné et daté, à remettre à votre avocat ou votre médiateur. Vous constituez le dossier vous-même, au fil des mois.</p>
+          <p>Exportez tout ou partie du carnet en un PDF ordonné et daté, à remettre à votre avocat, votre médiateur, le juge aux affaires familiales ou les services sociaux (ASE). Vous constituez le dossier vous-même, au fil des mois — eux reçoivent une pièce claire et vérifiable.</p>
         </div>
       </div>
     </div>
@@ -1527,7 +1526,7 @@
 
         <div class="persona">
           <div class="persona-mark">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7ED321" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D55" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
               <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
@@ -1539,7 +1538,7 @@
 
         <div class="persona">
           <div class="persona-mark">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B3A5B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
@@ -1551,7 +1550,7 @@
 
         <div class="persona">
           <div class="persona-mark">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7ED321" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D55" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 9l4-3 5 4 5-4 4 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
               <line x1="12" y1="10" x2="12" y2="22"/>
             </svg>
@@ -1563,7 +1562,7 @@
 
         <div class="persona">
           <div class="persona-mark">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A90E2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B3A5B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="9" cy="7" r="3"/>
               <circle cx="18" cy="9" r="2.4"/>
               <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/>
@@ -1677,11 +1676,11 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <svg class="footer-mark" viewBox="0 0 680 280" aria-hidden="true">
-            <path fill="none" stroke="#4A90E2" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
+            <path fill="none" stroke="#1B3A5B" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
                   d="M 90 140 L 90 200 L 145 200 L 145 140 M 77 140 L 117.5 102 L 158 140"/>
-            <path fill="none" stroke="#7ED321" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
+            <path fill="none" stroke="#2E7D55" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
                   d="M 535 140 L 535 200 L 590 200 L 590 140 M 522 140 L 562.5 102 L 603 140"/>
-            <path fill="none" stroke="#4A90E2" stroke-width="18" stroke-linecap="round"
+            <path fill="none" stroke="#1B3A5B" stroke-width="18" stroke-linecap="round"
                   d="M 158 170 Q 340 195 522 170"/>
           </svg>
           <div class="footer-name">ParentaLink</div>
