@@ -1753,6 +1753,14 @@
       }));
     });
 
+    // Smart store routing: appareils Apple → App Store, sinon Google Play (défaut du markup)
+    const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+    if (isApple) {
+      document.querySelectorAll('.plan-cta').forEach(a => {
+        a.href = 'https://apps.apple.com/fr/app/parentalink/id6762128606';
+      });
+    }
+
     // Show CSS fallback when image fails
     document.querySelectorAll('.phone-fallback').forEach(p => {
       const img = p.querySelector('img');
