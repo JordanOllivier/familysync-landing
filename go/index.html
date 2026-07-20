@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Redirection… — ParentaLink</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F7F5EF;color:#1B3A5B;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;text-align:center;line-height:1.6}
+    .box{max-width:22rem;padding:2rem}
+    a{color:#2E6099}
+  </style>
+  <script>
+    // Un seul lien à coller partout : /go/?c=CANAL
+    //   Insta bio   → /go/?c=insta
+    //   MP Facebook → /go/?c=fb-mp
+    //   Presse      → /go/?c=presse
+    // La page détecte l'OS et redirige vers le bon store, en taguant la source.
+    (function () {
+      var APPLE = 'https://apps.apple.com/app/apple-store/id6762128606'; // format lien de campagne Apple
+      var PLAY  = 'https://play.google.com/store/apps/details?id=com.parentalink.app';
+      // ↓ Ton "provider token" App Store = juste le nombre (le pt=… du lien de campagne), PAS l'URL entière.
+      var APPLE_PT = '128771181';
+
+      var c = (new URLSearchParams(location.search).get('c') || 'link')
+                .replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 40) || 'link';
+      var isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent || '');
+      var dest;
+      if (isApple) {
+        dest = APPLE + '?pt=' + encodeURIComponent(APPLE_PT) + '&ct=' + encodeURIComponent(c) + '&mt=8';
+      } else {
+        var ref = encodeURIComponent('utm_source=' + c + '&utm_medium=link&utm_campaign=' + c);
+        dest = PLAY + '&referrer=' + ref;
+      }
+      location.replace(dest);
+    })();
+  </script>
+</head>
+<body>
+  <div class="box">
+    <p>Redirection vers le store…</p>
+    <p><a href="https://play.google.com/store/apps/details?id=com.parentalink.app">Continuer manuellement →</a></p>
+  </div>
+</body>
+</html>
